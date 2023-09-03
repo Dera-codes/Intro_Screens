@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intro_screen/home_page.dart';
 import 'package:intro_screen/intro_screens/intro_page1.dart';
 import 'package:intro_screen/intro_screens/intro_page2.dart';
 import 'package:intro_screen/intro_screens/intro_page3.dart';
@@ -15,6 +16,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   // controller to keep track of which page we,re on
   PageController _controller = PageController();
 
+  // track of if we're on the last page
+
+  bool onLastPage = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,6 +28,11 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           // page view
           PageView(
             controller: _controller,
+            onPageChanged: (index) {
+              setState(() {
+                onLastPage = (index == 2);
+              });
+            },
             children: [
               IntroPage1(),
               IntroPage2(),
@@ -40,10 +50,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
                 GestureDetector(
                   onTap: () {
-                    _controller.nextPage(
-                      duration: Duration(milliseconds: 500),
-                      curve: Curves.easeIn,
-                    );
+                    _controller.jumpToPage(2);
                   },
                   child: Text('Skip'),
                 ),
@@ -53,7 +60,29 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
                 //next or done
 
-                Text('next'),
+                onLastPage
+                    ? GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return Homepage();
+                              },
+                            ),
+                          );
+                        },
+                        child: Text('done'),
+                      )
+                    : GestureDetector(
+                        onTap: () {
+                          _controller.nextPage(
+                            duration: Duration(milliseconds: 500),
+                            curve: Curves.easeIn,
+                          );
+                        },
+                        child: Text('next'),
+                      ),
               ],
             ),
           ),
