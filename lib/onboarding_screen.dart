@@ -24,16 +24,38 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           PageView(
             controller: _controller,
             children: [
-            IntroPage1(),
-            IntroPage2(),
-            IntroPage3(),
+              IntroPage1(),
+              IntroPage2(),
+              IntroPage3(),
             ],
           ),
-          // dot indicator
 
+          // dot indicator
           Container(
             alignment: Alignment(0, 0.75),
-            child: SmoothPageIndicator(controller: _controller, count: 3),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                // skip
+
+                GestureDetector(
+                  onTap: () {
+                    _controller.nextPage(
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.easeIn,
+                    );
+                  },
+                  child: Text('Skip'),
+                ),
+
+                //dot  indicators
+                SmoothPageIndicator(controller: _controller, count: 3),
+
+                //next or done
+
+                Text('next'),
+              ],
+            ),
           ),
         ],
       ),
